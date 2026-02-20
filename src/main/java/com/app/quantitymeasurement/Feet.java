@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class Feet {
 
-    private final double value; // Immutable field
+    private final double value; 
 
     
     public Feet(double value) {
