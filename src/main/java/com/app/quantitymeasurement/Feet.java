@@ -42,9 +42,8 @@ public class Feet {
         return Double.compare(this.value, other.value) == 0;
     }
 
-    /**
-     * Override hashCode() whenever equals() is overridden
-     */
+    
+     // Override hashCode() whenever equals() is overridden
     @Override
     public int hashCode() {
         return Objects.hash(value);
