@@ -6,14 +6,6 @@ import java.util.Objects;
 
 public class QuantityMeasurementApp {
 
-    /**
-     * Inner class to represent Feet measurement
-     */
-    
-
-    /**
-     * Main method to demonstrate equality
-     */
     public static void main(String[] args) {
 
         Feet feet1 = new Feet(1.0);

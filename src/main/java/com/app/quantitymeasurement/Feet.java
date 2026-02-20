@@ -7,9 +7,7 @@ public class Feet {
 
     private final double value; // Immutable field
 
-    /**
-     * Constructor to initialize feet value
-     */
+    
     public Feet(double value) {
         this.value = value;
     }
@@ -18,9 +16,7 @@ public class Feet {
         return value;
     }
 
-    /**
-     * Override equals() to compare Feet objects
-     */
+    
     @Override
     public boolean equals(Object obj) {
 
