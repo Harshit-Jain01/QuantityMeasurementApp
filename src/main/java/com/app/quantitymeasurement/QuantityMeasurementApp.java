@@ -1,6 +1,5 @@
 package com.app.quantitymeasurement;
 
-
 public class QuantityMeasurementApp {
 
 	// Common display utility method
@@ -30,7 +29,6 @@ public class QuantityMeasurementApp {
 		displayResult(length + " converted to " + to, result);
 
 		return result;
-		
 	}
 
 	public static void main(String[] args) {
@@ -45,5 +43,6 @@ public class QuantityMeasurementApp {
 		QuantityLength length = new QuantityLength(2.0, LengthUnit.YARDS);
 		demonstrateLengthConversion(length, LengthUnit.FEET);
 
+		
 	}
 }
