@@ -42,7 +42,11 @@
 
 ###  UC8 – Standalone Unit Enum Refactoring
   - Refactors the design by extracting `LengthUnit` into a standalone enum responsible for all unit conversion logic  
-  - Simplifies the `Length` class to delegate conversions to the unit, improving cohesion, reducing coupling, and enabling scalable support for additional measurement categories while preserving existing functionality  
+  - Simplifies the `Length` class to delegate conversions to the unit, improving cohesion, reducing coupling, and enabling scalable support for additional measurement categories while preserving existing functionality 
+
+### UC9 – Weight Measurement Support
+  - Introduces a new measurement category for weight with units **Kilogram, Gram, and Pound**, supporting equality checks, unit conversion, and addition operations  
+  - Mirrors the design patterns used for length measurements, ensuring category type safety, immutability, and scalable architecture while keeping weight and length as independent, non-comparable domains. 
 
   
 ### 🧰 Tech Stack
@@ -78,8 +82,13 @@
   │   │               └── 📁 quantitymeasurement
   │   │                   └── 📄 LengthUnit.java
   │   │                   └── 📄 QuantityLength.java
+  |   |                   └── 📄 WeightUnit.java
+  |   |                   └── 📄 QuantityWeight.java
   │   │                   └── 📄 QuantityMeasurementApp.java
+  |   |               
   │   │
+  |   |
+  |   |
   │   └── 📁 test
   │       └── 📁 java
   │           └── 📁 com
