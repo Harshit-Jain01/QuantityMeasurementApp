@@ -40,6 +40,10 @@
   - Extends length addition by allowing the caller to explicitly choose the unit of the result  
   - Performs automatic normalization and conversion of operands, returning a new immutable `Length` instance in the specified target unit while preserving mathematical accuracy 
 
+###  UC8 – Standalone Unit Enum Refactoring
+  - Refactors the design by extracting `LengthUnit` into a standalone enum responsible for all unit conversion logic  
+  - Simplifies the `Length` class to delegate conversions to the unit, improving cohesion, reducing coupling, and enabling scalable support for additional measurement categories while preserving existing functionality  
+
   
 ### 🧰 Tech Stack
 
