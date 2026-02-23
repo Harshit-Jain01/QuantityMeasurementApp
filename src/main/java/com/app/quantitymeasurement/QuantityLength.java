@@ -4,6 +4,7 @@ import java.util.Objects;
 
 public class QuantityLength {
 
+	// Attribute
 	private final double value;
 	private final LengthUnit unit;
 
@@ -23,32 +24,40 @@ public class QuantityLength {
 		return this.value * unit.getConversionFactor();
 	}
 
-	// Addition method
-	public QuantityLength add(QuantityLength other) {
+	// Addition method with flexible targetUnit 
+	public QuantityLength add(QuantityLength other, LengthUnit targetUnit) {
 
-		if (other == null) {
-			throw new IllegalArgumentException("Second operand cannot be null");
-		}
+		// Checking null operand
+	    if (other == null) {
+	        throw new IllegalArgumentException("Second operand cannot be null");
+	    }
 
-		if (!Double.isFinite(this.value) || !Double.isFinite(other.value)) {
-			throw new IllegalArgumentException("Values must be finite");
-		}
+	    // Checking target unit 
+	    if (targetUnit == null) {
+	        throw new IllegalArgumentException("Target unit cannot be null");
+	    }
 
-		// Converting to base unit
-		double thisBase = this.convertToBaseUnit();
-		double otherBase = other.convertToBaseUnit();
+	    // Checking Finite value 
+	    if (!Double.isFinite(this.value) || !Double.isFinite(other.value)) {
+	        throw new IllegalArgumentException("Values must be finite");
+	    }
 
-		double sumBase = thisBase + otherBase;
+	    // Convert both operands to base unit (inches)
+	    double baseValue1 = this.convertToBaseUnit();
+	    double baseValue2 = other.convertToBaseUnit();
 
-		double resultValue = sumBase / this.unit.getConversionFactor();
+	    double sumBase = baseValue1 + baseValue2;
 
-		// returning result value
-		return new QuantityLength(resultValue, this.unit);
+	    // Convert result to explicit target unit
+	    double resultValue = sumBase / targetUnit.getConversionFactor();
+
+	    return new QuantityLength(resultValue, targetUnit);
 	}
 
 	// Static method to convert to target type
 	public static double convert(double value, LengthUnit source, LengthUnit target) {
 
+		// Validation
 		if (source == null || target == null) {
 			throw new IllegalArgumentException("Unit cannot be null");
 		}
@@ -64,6 +73,7 @@ public class QuantityLength {
 		return baseValue / target.getConversionFactor();
 	}
 
+	// Instance conversion method
 	public QuantityLength convertTo(LengthUnit target) {
 
 		double convertedValue = convert(this.value, this.unit, target);
@@ -79,6 +89,7 @@ public class QuantityLength {
 		if (this == obj)
 			return true;
 
+		// Checking null and class type
 		if (obj == null || getClass() != obj.getClass())
 			return false;
 
@@ -91,6 +102,7 @@ public class QuantityLength {
 		return difference < 0.0001;
 	}
 
+	// Overriding hashCode method - consistent with equals
 	@Override
 	public int hashCode() {
 
