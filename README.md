@@ -36,7 +36,11 @@
   - Introduces addition between length measurements with automatic unit normalization and conversion.
   - Returns a new immutable `Length` result expressed in the unit of the first operand while preserving mathematical accuracy.
 
+### UC7 – Addition with Target Unit Specification
+  - Extends length addition by allowing the caller to explicitly choose the unit of the result  
+  - Performs automatic normalization and conversion of operands, returning a new immutable `Length` instance in the specified target unit while preserving mathematical accuracy 
 
+  
 ### 🧰 Tech Stack
 
 - **Java 17+** — core language and application development  
