@@ -57,6 +57,15 @@
   - Allows new measurement categories to be added by creating a new enum implementing the interface, with no changes to existing code  
   - Promotes maintainability, extensibility, and compliance with core SOLID principles while keeping objects immutable
 
+### UC11 – Volume Measurement Support (Litre, Millilitre, Gallon)
+  - Introduces a new measurement category for volume with units **Litre (L), Millilitre (mL), and Gallon (gal)** using litre as the base unit  
+  - Supports equality comparison, unit conversion, and addition operations through the existing generic `Quantity<U extends IMeasurable>` class  
+  - Validates that volume measurements in different units are equivalent when representing the same quantity (e.g., 1 L = 1000 mL ≈ 0.264172 gal)  
+  - Maintains strict category isolation — volume measurements are independent and non-comparable with length or weight measurements  
+  - Requires only a new `VolumeUnit` enum implementing `IMeasurable`; no changes to core classes or application logic  
+  - Demonstrates seamless scalability of the UC10 architecture to additional measurement domains  
+  - Preserves immutability, type safety, and consistent behavior across all supported categories  
+
   
 ### 🧰 Tech Stack
 
