@@ -48,6 +48,15 @@
   - Introduces a new measurement category for weight with units **Kilogram, Gram, and Pound**, supporting equality checks, unit conversion, and addition operations  
   - Mirrors the design patterns used for length measurements, ensuring category type safety, immutability, and scalable architecture while keeping weight and length as independent, non-comparable domains. 
 
+### UC10 – Generic Quantity Class for Unified Measurement Support
+  - Refactors the system to use a single **generic Quantity<U extends IMeasurable> class**, replacing separate classes for each measurement category  
+  - Uses a common unit interface to standardize conversion behavior across all unit types  
+  - Provides equality comparison, unit conversion, and addition operations for any supported category without code duplication  
+  - Preserves domain integrity — quantities from different categories (e.g., length vs weight) cannot be compared or combined  
+  - Reduces architectural complexity by consolidating logic into one reusable implementation  
+  - Allows new measurement categories to be added by creating a new enum implementing the interface, with no changes to existing code  
+  - Promotes maintainability, extensibility, and compliance with core SOLID principles while keeping objects immutable
+
   
 ### 🧰 Tech Stack
 
@@ -81,9 +90,9 @@
   │   │           └── 📁 app
   │   │               └── 📁 quantitymeasurement
   │   │                   └── 📄 LengthUnit.java
-  │   │                   └── 📄 QuantityLength.java
+  │   │                   └── 📄 IMeasurable.java
   |   |                   └── 📄 WeightUnit.java
-  |   |                   └── 📄 QuantityWeight.java
+  |   |                   └── 📄 Quantity.java
   │   │                   └── 📄 QuantityMeasurementApp.java
   |   |               
   │   │
