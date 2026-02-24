@@ -85,7 +85,14 @@
   - Updated Quantity<U> to validate operation support before execution  
   - Preserved full arithmetic support for length, weight, and volume units  
   - Ensured strict cross-category type safety and backward compatibility (UC1–UC13)  
-  - Added demonstration cases and comprehensive tests for temperature equality, conversion, and error handling   
+  - Added demonstration cases and comprehensive tests for temperature equality, conversion, and error handling  
+ 
+### UC14 – Temperature Measurement with Selective Arithmetic Support
+- Adds **temperature units (Celsius, Fahrenheit, Kelvin)** with equality and conversion support only  
+- Refactors `IMeasurable` to make arithmetic operations optional via default methods  
+- Uses precise non-linear formulas for accurate cross-unit conversion  
+- Disables arithmetic on absolute temperatures (throws `UnsupportedOperationException`)  
+- Ensures type safety and keeps temperature separate from other measurement categories
 
 ### 🧰 Tech Stack
 
@@ -123,8 +130,8 @@
   |   |                   └── 📄 WeightUnit.java
   |   |                   └── 📄 Quantity.java
   │   │                   └── 📄 VolumeUnit.java
-  |   |                   └── 📄 QuantityMeasurementApp.java
-  │   │
+  |   |                   └── 📄 TemperatureUnit.java
+  │   │                   └── 📄 QuantityMeasurementApp.java
   |   |
   |   |
   │   └── 📁 test
