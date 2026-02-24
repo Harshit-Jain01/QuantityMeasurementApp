@@ -66,7 +66,17 @@
   - Demonstrates seamless scalability of the UC10 architecture to additional measurement domains  
   - Preserves immutability, type safety, and consistent behavior across all supported categories  
 
-  
+ ### UC12 – Subtraction and Division Operations on Quantity Measurements
+  - Extends the generic `Quantity<U extends IMeasurable>` class with **subtraction** and **division** operations for comprehensive arithmetic support  
+  - Subtraction computes the difference between two quantities of the same category and returns a new immutable `Quantity<U>` result  
+  - Division computes the ratio between two quantities and returns a **dimensionless scalar (double)** value  
+  - Supports cross-unit arithmetic within the same category through automatic conversion to a common base unit  
+  - Allows implicit result unit (first operand’s unit) or explicit target unit specification for subtraction  
+  - Preserves strict category isolation — operations across different domains (e.g., length vs weight) are prevented  
+  - Maintains immutability, validation, and consistent error handling (null checks, finite values, division by zero)  
+  - Demonstrates scalability of the generic design by adding new operations without modifying existing architecture  
+
+
 ### 🧰 Tech Stack
 
 - **Java 17+** — core language and application development  
@@ -102,8 +112,8 @@
   │   │                   └── 📄 IMeasurable.java
   |   |                   └── 📄 WeightUnit.java
   |   |                   └── 📄 Quantity.java
-  │   │                   └── 📄 QuantityMeasurementApp.java
-  |   |               
+  │   │                   └── 📄 VolumeUnit.java
+  |   |                   └── 📄 QuantityMeasurementApp.java
   │   │
   |   |
   |   |
