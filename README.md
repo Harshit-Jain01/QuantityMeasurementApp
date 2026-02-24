@@ -76,6 +76,16 @@
   - Maintains immutability, validation, and consistent error handling (null checks, finite values, division by zero)  
   - Demonstrates scalability of the generic design by adding new operations without modifying existing architecture  
 
+### UC13: Add temperature measurement support with selective arithmetic and IMeasurable refactoring
+
+  - Introduced TemperatureUnit (Celsius, Fahrenheit, Kelvin) with accurate non-linear conversions  
+  - Refactored IMeasurable to support optional arithmetic via default methods  
+  - Added SupportsArithmetic functional interface with lambda-based capability checks  
+  - Disabled arithmetic operations for temperature (add, subtract, divide) with clear exceptions  
+  - Updated Quantity<U> to validate operation support before execution  
+  - Preserved full arithmetic support for length, weight, and volume units  
+  - Ensured strict cross-category type safety and backward compatibility (UC1–UC13)  
+  - Added demonstration cases and comprehensive tests for temperature equality, conversion, and error handling   
 
 ### 🧰 Tech Stack
 
