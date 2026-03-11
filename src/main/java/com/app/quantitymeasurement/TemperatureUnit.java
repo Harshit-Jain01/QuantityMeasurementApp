@@ -1,42 +1,50 @@
 package com.app.quantitymeasurement;
 
 
+import java.util.function.Function;
+
 public enum TemperatureUnit implements IMeasurable {
 
-    CELSIUS {
-        @Override
-        public double convertToBaseUnit(double value) {
-            return value; // Celsius is the base unit
-        }
+	CELSIUS(c -> c, c -> c),
 
-        @Override
-        public double convertFromBaseUnit(double baseValue) {
-            return baseValue;
-        }
-    },
+	FAHRENHEIT(f -> (f - 32) * 5 / 9, c -> (c * 9 / 5) + 32),
 
-    FAHRENHEIT {
-        @Override
-        public double convertToBaseUnit(double value) {
-            return (value - 32) * 5.0 / 9.0;
-        }
+	KELVIN(k -> k - 273.15, c -> c + 273.15);
 
-        @Override
-        public double convertFromBaseUnit(double baseValue) {
-            return (baseValue * 9.0 / 5.0) + 32;
-        }
-    };
+	private final Function<Double, Double> toCelsius;
+	private final Function<Double, Double> fromCelsius;
 
-    // Overrides the default true from IMeasurable
-    @Override
-    public boolean supportsArithmetic() {
-        return false;
-    }
+	// temperature does not support arithmetic
+	private final SupportsArithmetic supportsArithmetic = () -> false;
 
-    // Overrides the no-op default from IMeasurable — always throws
-    @Override
-    public void validateOperationSupport(String operation) {
-        throw new UnsupportedOperationException(
-                "Temperature does not support arithmetic operation: " + operation);
-    }
+	TemperatureUnit(Function<Double, Double> toCelsius, Function<Double, Double> fromCelsius) {
+		this.toCelsius = toCelsius;
+		this.fromCelsius = fromCelsius;
+	}
+
+	@Override
+	public double convertToBaseUnit(double value) {
+		return toCelsius.apply(value);
+	}
+
+	@Override
+	public double convertFromBaseUnit(double baseValue) {
+		return fromCelsius.apply(baseValue);
+	}
+
+	@Override
+	public boolean supportsArithmetic() {
+		return supportsArithmetic.isSupported();
+	}
+
+	@Override
+	public void validateOperationSupport(String operation) {
+		throw new UnsupportedOperationException(
+				"Temperature does not support arithmetic operation: " + operation);
+	}
+
+	@Override
+	public String getUnitName() {
+		return name();
+	}
 }
