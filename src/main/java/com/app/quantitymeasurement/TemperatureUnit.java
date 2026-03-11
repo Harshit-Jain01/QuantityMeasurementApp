@@ -1,6 +1,5 @@
 package com.app.quantitymeasurement;
 
-
 import java.util.function.Function;
 
 public enum TemperatureUnit implements IMeasurable {
@@ -39,12 +38,26 @@ public enum TemperatureUnit implements IMeasurable {
 
 	@Override
 	public void validateOperationSupport(String operation) {
-		throw new UnsupportedOperationException(
-				"Temperature does not support arithmetic operation: " + operation);
+		throw new UnsupportedOperationException("Temperature does not support arithmetic operation: " + operation);
 	}
 
 	@Override
 	public String getUnitName() {
 		return name();
+	}
+
+	@Override
+	public String getMeasurementType() {
+		return this.getClass().getSimpleName();
+	}
+
+	@Override
+	public IMeasurable getUnitInstance(String unitName) {
+		for (TemperatureUnit unit : TemperatureUnit.values()) {
+			if (unit.getUnitName().equalsIgnoreCase(unitName)) {
+				return unit;
+			}
+		}
+		throw new IllegalArgumentException("Invalid temperature unit: " + unitName);
 	}
 }
