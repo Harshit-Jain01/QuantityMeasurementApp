@@ -1,12 +1,12 @@
 package com.app.quantitymeasurement.service;
 
-import com.app.quantitymeasurement.IMeasurable;
-import com.app.quantitymeasurement.Quantity;
-import com.app.quantitymeasurement.QuantityDTO;
-import com.app.quantitymeasurement.QuantityMeasurementException;
-import com.app.quantitymeasurement.model.QuantityMeasurementEntity;
-import com.app.quantitymeasurement.model.QuantityModel;
+import com.app.quantitymeasurement.entity.QuantityDTO;
+import com.app.quantitymeasurement.entity.QuantityMeasurementEntity;
+import com.app.quantitymeasurement.entity.QuantityModel;
+import com.app.quantitymeasurement.exception.QuantityMeasurementException;
 import com.app.quantitymeasurement.repository.IQuantityMeasurementRepository;
+import com.app.quantitymeasurement.unit.IMeasurable;
+import com.app.quantitymeasurement.unit.Quantity;
 
 public class QuantityMeasurementServiceImpl implements IQuantityMeasurementService {
 
@@ -252,13 +252,13 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
 	private IMeasurable resolveUnit(String measurementType, String unitName) {
 		switch (measurementType) {
 		case "LengthUnit":
-			return com.app.quantitymeasurement.LengthUnit.INCH.getUnitInstance(unitName);
+			return com.app.quantitymeasurement.unit.LengthUnit.INCH.getUnitInstance(unitName);
 		case "WeightUnit":
-			return com.app.quantitymeasurement.WeightUnit.GRAM.getUnitInstance(unitName);
+			return com.app.quantitymeasurement.unit.WeightUnit.GRAM.getUnitInstance(unitName);
 		case "VolumeUnit":
-			return com.app.quantitymeasurement.VolumeUnit.LITRE.getUnitInstance(unitName);
+			return com.app.quantitymeasurement.unit.VolumeUnit.LITRE.getUnitInstance(unitName);
 		case "TemperatureUnit":
-			return com.app.quantitymeasurement.TemperatureUnit.CELSIUS.getUnitInstance(unitName);
+			return com.app.quantitymeasurement.unit.TemperatureUnit.CELSIUS.getUnitInstance(unitName);
 		default:
 			throw new QuantityMeasurementException("Unknown measurement type: " + measurementType);
 		}

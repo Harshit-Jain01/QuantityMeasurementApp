@@ -1,4 +1,4 @@
-package com.app.quantitymeasurement;
+package com.app.quantitymeasurement.core;
 
 public enum ArithmeticOperation {
 
