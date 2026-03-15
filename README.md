@@ -94,6 +94,65 @@
 - Disables arithmetic on absolute temperatures (throws `UnsupportedOperationException`)  
 - Ensures type safety and keeps temperature separate from other measurement categories
 
+## UC15 – N-Tier Architecture Refactoring
+
+UC15 refactors the **Quantity Measurement Application** from a monolithic structure into a **professional N-Tier architecture** to improve maintainability, scalability, and separation of concerns.
+
+### Architecture Layers
+
+The application is divided into the following layers:
+```
+Application Layer
+↓
+Controller Layer
+↓
+Service Layer
+↓
+Repository Layer
+↓
+Entity / Model Layer
+
+```
+
+### Layers Description
+
+**Application Layer**
+- Entry point of the application (`QuantityMeasurementApp`)
+- Initializes controller, service, and repository.
+
+**Controller Layer**
+- Handles user requests and delegates operations to the service layer.
+- Implemented by `QuantityMeasurementController`.
+
+**Service Layer**
+- Contains business logic for comparison, conversion, and arithmetic operations.
+- Implemented by `IQuantityMeasurementService` and `QuantityMeasurementServiceImpl`.
+
+**Repository Layer**
+- Handles persistence of measurement operations.
+- Implemented by `IQuantityMeasurementRepository` and `QuantityMeasurementCacheRepository`.
+
+**Entity / Model Layer**
+- Defines data structures used across the application.
+- Includes:
+  - `QuantityDTO`
+  - `QuantityModel`
+  - `QuantityMeasurementEntity`
+
+### Design Principles Used
+
+- **SOLID Principles**
+- **Dependency Injection**
+- **Interface Segregation**
+- **Separation of Concerns**
+
+### Design Patterns Used
+
+- **Singleton Pattern** – Repository
+- **Factory Pattern** – Object creation
+- **Facade Pattern** – Controller interface
+
+
 ### 🧰 Tech Stack
 
 - **Java 17+** — core language and application development  
@@ -117,31 +176,63 @@
 ### 📂 Project Structure
 
 ```
-  📦 QuantityMeasurementApp
-  │
-  ├── 📁 src
-  │   ├── 📁 main
-  │   │   └── 📁 java
-  │   │       └── 📁 com
-  │   │           └── 📁 app
-  │   │               └── 📁 quantitymeasurement
-  │   │                   └── 📄 LengthUnit.java
-  │   │                   └── 📄 IMeasurable.java
-  |   |                   └── 📄 WeightUnit.java
-  |   |                   └── 📄 Quantity.java
-  │   │                   └── 📄 VolumeUnit.java
-  |   |                   └── 📄 TemperatureUnit.java
-  │   │                   └── 📄 QuantityMeasurementApp.java
-  |   |
-  |   |
-  │   └── 📁 test
-  │       └── 📁 java
-  │           └── 📁 com
-  │               └── 📁 app
-  │                   └── 📁 quantitymeasurement
-  │                    └── 📄 QuantityMeasurementAppTest.java 
-  │                    
-  └── 📘 README.md
+ 📦 QuantityMeasurementApp
+│
+├── 📁 src
+│   │
+│   ├── 📁 main
+│   │   │
+│   │   ├── 📁 java
+│   │   │   └── 📁 com
+│   │   │       └── 📁 app
+│   │   │           └── 📁 quantitymeasurement
+│   │   │
+│   │   │               ├── 📁 controller
+│   │   │               │   └── 📄 QuantityMeasurementController.java
+│   │   │               │
+│   │   │               ├── 📁 core
+│   │   │               │   ├── 📄 ArithmeticOperation.java
+│   │   │               │   └── 📄 SupportsArithmetic.java
+│   │   │               │
+│   │   │               ├── 📁 entity
+│   │   │               │   ├── 📄 QuantityDTO.java
+│   │   │               │   ├── 📄 QuantityModel.java
+│   │   │               │   └── 📄 QuantityMeasurementEntity.java
+│   │   │               │
+│   │   │               ├── 📁 exception
+│   │   │               │   └── 📄 QuantityMeasurementException.java
+│   │   │               │
+│   │   │               ├── 📁 repository
+│   │   │               │   ├── 📄 H2ConnectionManager.java
+│   │   │               │   ├── 📄 IQuantityMeasurementRepository.java
+│   │   │               │   └── 📄 QuantityMeasurementH2Repository.java
+│   │   │               │
+│   │   │               ├── 📁 service
+│   │   │               │   ├── 📄 IQuantityMeasurementService.java
+│   │   │               │   └── 📄 QuantityMeasurementServiceImpl.java
+│   │   │               │
+│   │   │               ├── 📁 unit
+│   │   │               │   ├── 📄 IMeasurable.java
+│   │   │               │   ├── 📄 LengthUnit.java
+│   │   │               │   ├── 📄 WeightUnit.java
+│   │   │               │   ├── 📄 VolumeUnit.java
+│   │   │               │   ├── 📄 TemperatureUnit.java
+│   │   │               │   └── 📄 Quantity.java
+│   │   │               │
+│   │   │               └── 📄 QuantityMeasurementApp.java
+│   │
+│   │
+│   ├── 📁 resources
+│   │   └── 📄 schema.sql
+│   │
+│   └── 📁 test
+│       └── 📁 java
+│           └── 📁 com
+│               └── 📁 app
+│                   └── 📁 quantitymeasurement
+│                       └── 📄 QuantityMeasurementAppTest.java
+│
+└── 📘 README.md
 ```
 
 ## ⚙️ Development Approach
