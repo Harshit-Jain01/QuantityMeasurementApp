@@ -117,31 +117,32 @@
 ### 📂 Project Structure
 
 ```
-  📦 QuantityMeasurementApp
-  │
-  ├── 📁 src
-  │   ├── 📁 main
-  │   │   └── 📁 java
-  │   │       └── 📁 com
-  │   │           └── 📁 app
-  │   │               └── 📁 quantitymeasurement
-  │   │                   └── 📄 LengthUnit.java
-  │   │                   └── 📄 IMeasurable.java
-  |   |                   └── 📄 WeightUnit.java
-  |   |                   └── 📄 Quantity.java
-  │   │                   └── 📄 VolumeUnit.java
-  |   |                   └── 📄 TemperatureUnit.java
-  │   │                   └── 📄 QuantityMeasurementApp.java
-  |   |
-  |   |
-  │   └── 📁 test
-  │       └── 📁 java
-  │           └── 📁 com
-  │               └── 📁 app
-  │                   └── 📁 quantitymeasurement
-  │                    └── 📄 QuantityMeasurementAppTest.java 
-  │                    
-  └── 📘 README.md
+📦 QuantityMeasurementApp
+│
+├── 📁 src
+│   ├── 📁 main
+│   │   └── 📁 java
+│   │       └── 📁 com
+│   │           └── 📁 apps
+│   │               └── 📁 quantitymeasurement
+│   │                   ├── 📄 ArithmeticOperation.java
+│   │                   ├── 📄 IMeasurable.java
+│   │                   ├── 📄 LengthUnit.java
+│   │                   ├── 📄 WeightUnit.java
+│   │                   ├── 📄 VolumeUnit.java
+│   │                   ├── 📄 TemperatureUnit.java
+│   │                   ├── 📄 Quantity.java
+│   │                   ├── 📄 SupportsArithmetic.java
+│   │                   └── 📄 QuantityMeasurementApp.java
+│
+│   └── 📁 test
+│       └── 📁 java
+│           └── 📁 com
+│               └── 📁 apps
+│                   └── 📁 QuantityMeasurementApp
+│                       └── 📄 QuantityMeasurementAppTest.java
+│
+└── 📘 README.md
 ```
 
 ## ⚙️ Development Approach
