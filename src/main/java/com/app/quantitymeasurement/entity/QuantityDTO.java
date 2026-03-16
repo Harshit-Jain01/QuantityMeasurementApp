@@ -1,105 +1,92 @@
 package com.app.quantitymeasurement.entity;
 
+/**
+ * QuantityDTO is the Data Transfer Object used for input and output
+ * between the controller and service layers.
+ * Contains inner enums for all supported unit types.
+ */
 public class QuantityDTO {
 
-	// Fields
-	public double value;
-	public IMeasurableUnit unit;
+    // ── Fields ────────────────────────────────────────────────────────────────
+    public double value;
+    public String unitName;
+    public String measurementType;
 
-	// Constructor
-	public QuantityDTO(double value, IMeasurableUnit unit) {
-		this.value = value;
-		this.unit = unit;
-	}
+    // ── Constructor ───────────────────────────────────────────────────────────
+    public QuantityDTO(double value, String unitName, String measurementType) {
+        this.value           = value;
+        this.unitName        = unitName;
+        this.measurementType = measurementType;
+    }
 
-	@Override
-	public String toString() {
-		return value + " " + unit.getUnitName();
-	}
+    @Override
+    public String toString() {
+        return value + " " + unitName;
+    }
 
-	// ─────────────────────────────────────────────────────────────────────────
-	// INNER INTERFACE
-	// ─────────────────────────────────────────────────────────────────────────
+    // ── Inner Interface ───────────────────────────────────────────────────────
+    public interface IMeasurableUnit {
+        String getUnitName();
+        String getMeasurementType();
+    }
 
-	public interface IMeasurableUnit {
-		public String getUnitName();
+    // ── LENGTH ────────────────────────────────────────────────────────────────
+    public enum LengthUnit implements IMeasurableUnit {
+        FEET, INCH, YARDS, CENTIMETERS;
 
-		public String getMeasurementType();
-	}
+        @Override
+        public String getUnitName() {
+            return this.name();
+        }
 
-	// ─────────────────────────────────────────────────────────────────────────
-	// INNER ENUMS — mirror the core unit enums for easy service-layer mapping
-	// ─────────────────────────────────────────────────────────────────────────
+        @Override
+        public String getMeasurementType() {
+            return this.getClass().getSimpleName();
+        }
+    }
 
-	/**
-	 * Length units: FEET, INCHES, YARDS, CENTIMETERS Maps to core LengthUnit enum
-	 * in the service layer.
-	 */
-	public enum LengthUnit implements IMeasurableUnit {
-		FEET, INCH, YARDS, CENTIMETERS;
+    // ── WEIGHT ────────────────────────────────────────────────────────────────
+    public enum WeightUnit implements IMeasurableUnit {
+        GRAM, KILOGRAM, POUND;
 
-		@Override
-		public String getUnitName() {
-			return this.name();
-		}
+        @Override
+        public String getUnitName() {
+            return this.name();
+        }
 
-		@Override
-		public String getMeasurementType() {
-			return this.getClass().getSimpleName();
-		}
-	}
+        @Override
+        public String getMeasurementType() {
+            return this.getClass().getSimpleName();
+        }
+    }
 
-	/**
-	 * Weight units: GRAM, KILOGRAM, POUND Maps to core WeightUnit enum in the
-	 * service layer.
-	 */
-	public enum WeightUnit implements IMeasurableUnit {
-		GRAM, KILOGRAM, POUND;
+    // ── VOLUME ────────────────────────────────────────────────────────────────
+    public enum VolumeUnit implements IMeasurableUnit {
+        LITRE, MILLILITRE, GALLON;
 
-		@Override
-		public String getUnitName() {
-			return this.name();
-		}
+        @Override
+        public String getUnitName() {
+            return this.name();
+        }
 
-		@Override
-		public String getMeasurementType() {
-			return this.getClass().getSimpleName();
-		}
-	}
+        @Override
+        public String getMeasurementType() {
+            return this.getClass().getSimpleName();
+        }
+    }
 
-	/**
-	 * Volume units: LITRE, MILLILITRE, GALLON Maps to core VolumeUnit enum in the
-	 * service layer.
-	 */
-	public enum VolumeUnit implements IMeasurableUnit {
-		LITRE, MILLILITRE, GALLON;
+    // ── TEMPERATURE ───────────────────────────────────────────────────────────
+    public enum TemperatureUnit implements IMeasurableUnit {
+        CELSIUS, FAHRENHEIT, KELVIN;
 
-		@Override
-		public String getUnitName() {
-			return this.name();
-		}
+        @Override
+        public String getUnitName() {
+            return this.name();
+        }
 
-		@Override
-		public String getMeasurementType() {
-			return this.getClass().getSimpleName();
-		}
-	}
-
-	/**
-	 * Temperature units: CELSIUS, FAHRENHEIT, KELVIN Maps to core TemperatureUnit
-	 * enum in the service layer.
-	 */
-	public enum TemperatureUnit implements IMeasurableUnit {
-		CELSIUS, FAHRENHEIT, KELVIN;
-
-		@Override
-		public String getUnitName() {
-			return this.name();
-		}
-
-		@Override
-		public String getMeasurementType() {
-			return this.getClass().getSimpleName();
-		}
-	}
+        @Override
+        public String getMeasurementType() {
+            return this.getClass().getSimpleName();
+        }
+    }
 }

@@ -1,44 +1,58 @@
 package com.app.quantitymeasurement.unit;
 
+import java.util.logging.Logger;
+
+/**
+ * WeightUnit enum defines all supported weight units.
+ * Base unit is GRAM.
+ */
 public enum WeightUnit implements IMeasurable {
 
-	GRAM(1.0), KILOGRAM(1000.0), POUND(453.592);
+    GRAM(1.0),
+    KILOGRAM(1000.0),
+    POUND(453.592);
 
-	// relative to gram conversion factor
-	private final double conversionFactor;
+    private static final Logger logger = Logger.getLogger(
+            WeightUnit.class.getName()
+    );
 
-	// constructor
-	WeightUnit(double conversionFactor) {
-		this.conversionFactor = conversionFactor;
-	}
+    // Conversion factor relative to base unit (GRAM)
+    private final double conversionFactor;
 
-	@Override
-	public double convertToBaseUnit(double value) {
-		return value * conversionFactor;
-	}
+    WeightUnit(double conversionFactor) {
+        this.conversionFactor = conversionFactor;
+    }
 
-	@Override
-	public double convertFromBaseUnit(double baseValue) {
-		return baseValue / conversionFactor;
-	}
+    @Override
+    public double convertToBaseUnit(double value) {
+        return value * conversionFactor;
+    }
 
-	@Override
-	public String getUnitName() {
-		return this.name();
-	}
+    @Override
+    public double convertFromBaseUnit(double baseValue) {
+        return baseValue / conversionFactor;
+    }
 
-	@Override
-	public String getMeasurementType() {
-		return this.getClass().getSimpleName();
-	}
+    @Override
+    public String getUnitName() {
+        return this.name();
+    }
 
-	@Override
-	public IMeasurable getUnitInstance(String unitName) {
-		for (WeightUnit unit : WeightUnit.values()) {
-			if (unit.getUnitName().equalsIgnoreCase(unitName)) {
-				return unit;
-			}
-		}
-		throw new IllegalArgumentException("Invalid weight unit: " + unitName);
-	}
+    @Override
+    public String getMeasurementType() {
+        return this.getClass().getSimpleName();
+    }
+
+    @Override
+    public IMeasurable getUnitInstance(String unitName) {
+        for (WeightUnit unit : WeightUnit.values()) {
+            if (unit.getUnitName().equalsIgnoreCase(unitName)) {
+                return unit;
+            }
+        }
+        logger.severe("Invalid weight unit: " + unitName);
+        throw new IllegalArgumentException(
+                "Invalid weight unit: " + unitName
+        );
+    }
 }

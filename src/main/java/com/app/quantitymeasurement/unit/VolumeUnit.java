@@ -1,56 +1,58 @@
 package com.app.quantitymeasurement.unit;
 
+import java.util.logging.Logger;
+
+/**
+ * VolumeUnit enum defines all supported volume units.
+ * Base unit is LITRE.
+ */
 public enum VolumeUnit implements IMeasurable {
 
-	// Enum constants with conversion factors relative to base unit (LITRE)
-	LITRE(1.0), // Base unit
-	MILLILITRE(0.001), // 1 mL = 0.001 L
-	GALLON(3.78541); // 1 gallon ≈ 3.78541 L
+    LITRE(1.0),
+    MILLILITRE(0.001),
+    GALLON(3.78541);
 
-	// Attribute: conversion factor to base unit
-	private final double conversionFactor;
+    private static final Logger logger = Logger.getLogger(
+            VolumeUnit.class.getName()
+    );
 
-	// Constructor
-	VolumeUnit(double conversionFactor) {
-		this.conversionFactor = conversionFactor;
-	}
+    // Conversion factor relative to base unit (LITRE)
+    private final double conversionFactor;
 
-	// Converts given value to base unit
-	@Override
-	public double convertToBaseUnit(double value) {
-		return value * conversionFactor;
-	}
+    VolumeUnit(double conversionFactor) {
+        this.conversionFactor = conversionFactor;
+    }
 
-	// Converts base unit value litre to this unit
-	@Override
-	public double convertFromBaseUnit(double baseValue) {
-		return baseValue / conversionFactor;
-	}
+    @Override
+    public double convertToBaseUnit(double value) {
+        return value * conversionFactor;
+    }
 
-	// Returns readable unit name
-	@Override
-	public String getUnitName() {
-		return name();
-	}
+    @Override
+    public double convertFromBaseUnit(double baseValue) {
+        return baseValue / conversionFactor;
+    }
 
-	public double getConversionFactor() {
+    @Override
+    public String getUnitName() {
+        return this.name();
+    }
 
-		return conversionFactor;
-	}
+    @Override
+    public String getMeasurementType() {
+        return this.getClass().getSimpleName();
+    }
 
-	@Override
-	public String getMeasurementType() {
-		return this.getClass().getSimpleName();
-	}
-
-	
-	@Override
-	public IMeasurable getUnitInstance(String unitName) {
-		for (VolumeUnit unit : VolumeUnit.values()) {
-			if (unit.getUnitName().equalsIgnoreCase(unitName)) {
-				return unit;
-			}
-		}
-		throw new IllegalArgumentException("Invalid volume unit: " + unitName);
-	}
+    @Override
+    public IMeasurable getUnitInstance(String unitName) {
+        for (VolumeUnit unit : VolumeUnit.values()) {
+            if (unit.getUnitName().equalsIgnoreCase(unitName)) {
+                return unit;
+            }
+        }
+        logger.severe("Invalid volume unit: " + unitName);
+        throw new IllegalArgumentException(
+                "Invalid volume unit: " + unitName
+        );
+    }
 }

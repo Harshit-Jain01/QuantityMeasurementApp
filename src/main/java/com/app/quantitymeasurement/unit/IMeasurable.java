@@ -1,32 +1,28 @@
 package com.app.quantitymeasurement.unit;
 
+/**
+ * IMeasurable defines the contract for all unit enums.
+ * Every unit must support conversion to/from its base unit.
+ */
 public interface IMeasurable {
 
-	double convertToBaseUnit(double value);
+    // ── Core Conversion ───────────────────────────────────────────────────────
+    double convertToBaseUnit(double value);
+    double convertFromBaseUnit(double baseValue);
 
-	double convertFromBaseUnit(double baseValue);
+    // ── Unit Info ─────────────────────────────────────────────────────────────
+    String getUnitName();
+    String getMeasurementType();
 
-	String getUnitName();
+    // ── Unit Resolution ───────────────────────────────────────────────────────
+    IMeasurable getUnitInstance(String unitName);
 
-	/*
-	 * This is essential for ensuring that comparisons and conversions are only
-	 * performed between compatible types.
-	 */
-	String getMeasurementType();
+    // ── Arithmetic Support ────────────────────────────────────────────────────
+    default boolean supportsArithmetic() {
+        return true;
+    }
 
-	// This method is essential for converting QuantityDTO to IMeasurable units.
-	IMeasurable getUnitInstance(String unitName);
-
-	// default lambda → arithmetic supported
-	default boolean supportsArithmetic() {
-		return true;
-	}
-
-	// default validation
-	default void validateOperationSupport(String operation) {
-		// default: supported
-	}
-
-	
-
+    default void validateOperationSupport(String operation) {
+        // default: supported for all units except Temperature
+    }
 }
