@@ -152,6 +152,17 @@ Entity / Model Layer
 - **Factory Pattern** – Object creation
 - **Facade Pattern** – Controller interface
 
+## UC16 – JDBC-Based Database Integration
+  - Enhances the N-Tier architecture with persistent storage using JDBC, replacing the in-memory repository with `QuantityMeasurementDatabaseRepository` for durable data across restarts.
+  - Introduces configuration and performance utilities like `ApplicationConfig` (for environment-based settings) and `ConnectionPool` (for efficient connection reuse).
+
+- ⚙️ **Improved Repository & Error Handling**
+  - Extends repository capabilities with filtering and management methods (`getMeasurementsByType`, `getTotalCount`, etc.) and uses `PreparedStatement` to prevent SQL injection.
+  - Adds structured exception handling via `DatabaseException` and shifts logging to `java.util.logging` (via SLF4J/Logback).
+
+- 🧪 **Configurability, Testing & Best Practices**
+  - Supports H2 by default with easy switching to MySQL/PostgreSQL via properties, and runtime repository selection (`database` or `cache`).
+  - Includes schema setup, integration/unit tests, and follows best practices like connection pooling, clean resource handling, and layered architecture organization.
 
 ### 🧰 Tech Stack
 
@@ -176,63 +187,84 @@ Entity / Model Layer
 ### 📂 Project Structure
 
 ```
- 📦 QuantityMeasurementApp
-│
-├── 📁 src
-│   │
-│   ├── 📁 main
-│   │   │
-│   │   ├── 📁 java
-│   │   │   └── 📁 com
-│   │   │       └── 📁 app
-│   │   │           └── 📁 quantitymeasurement
-│   │   │
-│   │   │               ├── 📁 controller
-│   │   │               │   └── 📄 QuantityMeasurementController.java
-│   │   │               │
-│   │   │               ├── 📁 core
-│   │   │               │   ├── 📄 ArithmeticOperation.java
-│   │   │               │   └── 📄 SupportsArithmetic.java
-│   │   │               │
-│   │   │               ├── 📁 entity
-│   │   │               │   ├── 📄 QuantityDTO.java
-│   │   │               │   ├── 📄 QuantityModel.java
-│   │   │               │   └── 📄 QuantityMeasurementEntity.java
-│   │   │               │
-│   │   │               ├── 📁 exception
-│   │   │               │   └── 📄 QuantityMeasurementException.java
-│   │   │               │
-│   │   │               ├── 📁 repository
-│   │   │               │   ├── 📄 H2ConnectionManager.java
-│   │   │               │   ├── 📄 IQuantityMeasurementRepository.java
-│   │   │               │   └── 📄 QuantityMeasurementH2Repository.java
-│   │   │               │
-│   │   │               ├── 📁 service
-│   │   │               │   ├── 📄 IQuantityMeasurementService.java
-│   │   │               │   └── 📄 QuantityMeasurementServiceImpl.java
-│   │   │               │
-│   │   │               ├── 📁 unit
-│   │   │               │   ├── 📄 IMeasurable.java
-│   │   │               │   ├── 📄 LengthUnit.java
-│   │   │               │   ├── 📄 WeightUnit.java
-│   │   │               │   ├── 📄 VolumeUnit.java
-│   │   │               │   ├── 📄 TemperatureUnit.java
-│   │   │               │   └── 📄 Quantity.java
-│   │   │               │
-│   │   │               └── 📄 QuantityMeasurementApp.java
-│   │
-│   │
-│   ├── 📁 resources
-│   │   └── 📄 schema.sql
-│   │
-│   └── 📁 test
-│       └── 📁 java
-│           └── 📁 com
-│               └── 📁 app
-│                   └── 📁 quantitymeasurement
-│                       └── 📄 QuantityMeasurementAppTest.java
-│
-└── 📘 README.md
+📦 QuantityMeasurementApp
+  │
+  ├── 📁 src
+  │   ├── 📁 main
+  │   │   ├── 📁 java
+  │   │   │   └── 📁 com
+  │   │   │       └── 📁 app
+  │   │   │           └── 📁 quantitymeasurement
+  │   │   │               ├── 📁 controller
+  │   │   │               │   └── 📄 QuantityMeasurementController.java
+  │   │   │               │
+  │   │   │               ├── 📁 core
+  │   │   │               │   ├── 📄 ArithmeticOperation.java
+  │   │   │               │   └── 📄 SupportArithmetic.java
+  │   │   │               │      
+  │   │   │               ├── 📁 entity            
+  │   │   │               │   ├── 📄 QuantityDTO.java
+  │   │   │               │   ├── 📄 QuantityModel.java
+  │   │   │               │   └── 📄 QuantityMeasurementEntity.java
+  │   │   │               │
+  │   │   │               ├── 📁 exception
+  │   │   │               │   ├── 📄 QuantityMeasurementException.java
+  │   │   │               │   └── 📄 DatabaseException.java         
+  │   │   │               │
+  │   │   │               ├── 📁 repository
+  │   │   │               │   ├── 📄 IQuantityMeasurementRepository.java
+  │   │   │               │   ├── 📄 QuantityMeasurementCacheRepository.java
+  │   │   │               │   └── 📄 QuantityMeasurementDatabaseRepository.java  
+  │   │   │               │
+  │   │   │               ├── 📁 service
+  │   │   │               │   ├── 📄 IQuantityMeasurementService.java
+  │   │   │               │   └── 📄 QuantityMeasurementServiceImpl.java
+  │   │   │               │
+  │   │   │               │
+  │   │   │               ├── 📁 quantity
+  │   │   │               │   ├── 📄 Quantity.java
+  │   │   │               │
+  │   │   │               ├── 📁 unit
+  │   │   │               │   ├── 📄 IMeasurable.java
+  │   │   │               │   ├── 📄 LengthUnit.java
+  │   │   │               │   ├── 📄 WeightUnit.java
+  │   │   │               │   ├── 📄 VolumeUnit.java
+  │   │   │               │   └── 📄 TemperatureUnit.java
+  │   │   │               │
+  │   │   │               ├── 📁 util                               
+  │   │   │               │   ├── 📄 DatabaseConfig.java         
+  │   │   │               │   └── 📄 ConnectionPool.java             
+  │   │   │               │
+  │   │   │               └── 📄 QuantityMeasurementApp.java
+  │   │   │
+  │   │   └── 📁 resources
+  │   │       ├── 📄 application.properties                        
+  │   │       └── 📁 db
+  │   │           └── 📄 schema.sql                                  
+  │   │
+  │   └── 📁 test
+  │       ├── 📁 java
+  │       │   └── 📁 com
+  │       │       └── 📁 app
+  │       │           └── 📁 quantitymeasurement
+  │       │               ├── 📁 controller
+  │       │               │   └── 📄 QuantityMeasurementControllerTest.java
+  │       │               │
+  │       │               ├── 📁 entity
+  │       │               │   └── 📄 QuantityMeasurementEntityTest.java
+  │       │               │
+  │       │               ├── 📁 integrationTests                   
+  │       │               │   └── 📄 QuantityMeasurementIntegrationTest.java
+  │       │               │
+  │       │               │
+  │       │               ├── 📁 repository
+  │       │               │   ├── 📄 QuantityMeasurementCacheRepositoryTest.java
+  │       │               │   └── 📄 QuantityMeasurementDatabaseRepositoryTest.java 
+  │       │               ├── 📁 service
+  │       │               │   └── 📄 QuantityMeasurementServiceTest.java
+  │       │               
+  │       │
+  └── 📘 README.md
 ```
 
 ## ⚙️ Development Approach
