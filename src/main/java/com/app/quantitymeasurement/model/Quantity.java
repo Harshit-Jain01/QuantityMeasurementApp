@@ -4,27 +4,7 @@ import java.util.function.DoubleBinaryOperator;
 import com.app.quantitymeasurement.unit.IMeasurable;
 import com.app.quantitymeasurement.unit.SupportsArithmetic;
 
-/**
- * Quantity
- *
- * Immutable domain model that pairs a numeric value with a measurable unit and
- * exposes operations for equality comparison, unit conversion, addition, subtraction,
- * and division.
- *
- * <p>All arithmetic operations convert both operands to their common base unit before
- * applying the calculation, ensuring correct results regardless of the input units.
- * Operations return a <em>new</em> {@code Quantity} instance — this class is immutable.</p>
- *
- * <p>Arithmetic is only allowed for units that implement {@link SupportsArithmetic}
- * (LengthUnit, WeightUnit, VolumeUnit). Attempting arithmetic on TemperatureUnit throws
- * {@link UnsupportedOperationException}.</p>
- *
- * <p>Two quantities are considered equal when their base-unit values differ by less than
- * {@code 1e-6}. Cross-category comparisons (e.g., length vs. weight) always return
- * {@code false}.</p>
- *
- * @param <U> unit type, which must implement {@link IMeasurable}
- */
+
 public final class Quantity<U extends IMeasurable> {
 
     private final double value;
@@ -36,9 +16,7 @@ public final class Quantity<U extends IMeasurable> {
     /** Scale factor for rounding arithmetic results to 6 decimal places. */
     private static final double ROUND_SCALE = 1e6;
 
-    // -------------------------------------------------------------------------
     // Internal arithmetic operation enum
-    // -------------------------------------------------------------------------
 
     /**
      * Supported arithmetic operations, each backed by a {@link DoubleBinaryOperator}.
@@ -63,9 +41,7 @@ public final class Quantity<U extends IMeasurable> {
         }
     }
 
-    // -------------------------------------------------------------------------
     // Constructor
-    // -------------------------------------------------------------------------
 
     /**
      * Constructs a {@code Quantity} with the given value and unit.
@@ -82,9 +58,7 @@ public final class Quantity<U extends IMeasurable> {
         this.unit  = unit;
     }
 
-    // -------------------------------------------------------------------------
     // Accessors
-    // -------------------------------------------------------------------------
 
     /** @return the numeric value of this quantity */
     public double getValue() { return value; }
@@ -92,9 +66,7 @@ public final class Quantity<U extends IMeasurable> {
     /** @return the unit associated with this quantity */
     public U getUnit() { return unit; }
 
-    // -------------------------------------------------------------------------
     // Comparison and conversion
-    // -------------------------------------------------------------------------
 
     /**
      * Compares this quantity with another for equality within a tolerance of {@code 1e-6}
@@ -128,9 +100,7 @@ public final class Quantity<U extends IMeasurable> {
         return new Quantity<>(converted, targetUnit);
     }
 
-    // -------------------------------------------------------------------------
     // Arithmetic
-    // -------------------------------------------------------------------------
 
     /**
      * Adds another quantity to this one and returns the result in the current unit.
