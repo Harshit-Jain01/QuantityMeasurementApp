@@ -16,33 +16,9 @@ import java.util.stream.Collectors;
 
 /**
  * GlobalExceptionHandler
- *
  * Centralised exception handler for all REST controllers in the application.
  * {@code @ControllerAdvice} intercepts exceptions thrown by any controller and
  * returns consistent, structured JSON error responses instead of raw stack traces.
- *
- * <p>Handlers defined here:</p>
- * <ul>
- *   <li>{@link #handleMethodArgumentNotValidException} — Bean Validation failures
- *       ({@code @Valid} constraint violations). Returns {@code 400 Bad Request} with
- *       a list of field-level error messages.</li>
- *   <li>{@link #handleQuantityException} — Domain errors thrown by the service layer
- *       (e.g., incompatible units, unsupported operations). Returns {@code 400}.</li>
- *   <li>{@link #handleIllegalArgumentException} — Invalid method arguments. Returns {@code 400}.</li>
- *   <li>{@link #handleGlobalException} — Catch-all for any unhandled exception.
- *       Returns {@code 500 Internal Server Error}.</li>
- * </ul>
- *
- * <p>All error responses share the same JSON structure:</p>
- * <pre>
- * {
- *   "timestamp": "2024-01-01T12:00:00",
- *   "status":    400,
- *   "error":     "Quantity Measurement Error",
- *   "message":   "...",
- *   "path":      "/api/v1/quantities/add"
- * }
- * </pre>
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -52,10 +28,6 @@ public class GlobalExceptionHandler {
     /**
      * Handles Bean Validation failures that arise when a {@code @Valid}-annotated
      * request body fails its constraints.
-     *
-     * <p>All field-level error messages are collected and joined into a single
-     * {@code message} string so the client receives full feedback in one response.</p>
-     *
      * @param ex      the validation exception
      * @param request the current HTTP request (used for the {@code path} field)
      * @return {@code 400 Bad Request} with a structured validation error body
@@ -150,9 +122,7 @@ public class GlobalExceptionHandler {
         ));
     }
 
-    // -------------------------------------------------------------------------
     // Private helpers
-    // -------------------------------------------------------------------------
 
     /**
      * Builds the standardised error response map used by all handlers.
