@@ -8,26 +8,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
-/**
- * SecurityConfig
- *
- * Spring Security configuration for the Quantity Measurement application.
- *
- * For this UC all requests are permitted without authentication, allowing development
- * and testing to proceed without credential management. In a production environment,
- * replace the open {@code permitAll()} rule with role-based access control using
- * mechanisms such as JWT tokens or OAuth2.
- *
- * Key settings:
- * <ul>
- *   <li><b>CSRF disabled</b> — stateless REST APIs do not require CSRF tokens.</li>
- *   <li><b>All requests permitted</b> — no authentication required.</li>
- *   <li><b>Frame options: sameOrigin</b> — required for the H2 console to render
- *       correctly in a browser, since it uses an iframe internally.</li>
- *   <li><b>HTTP Basic and form login disabled</b> — prevents unwanted browser
- *       authentication popups when accessing API endpoints.</li>
- * </ul>
- */
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
