@@ -8,14 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.quantitymeasurement.exception.QuantityMeasurementException;
-import com.app.quantitymeasurement.model.QuantityDTO;
-import com.app.quantitymeasurement.model.QuantityMeasurementDTO;
-import com.app.quantitymeasurement.model.QuantityMeasurementEntity;
+import com.app.quantitymeasurement.dto.QuantityDTO;
+import com.app.quantitymeasurement.dto.QuantityMeasurementDTO;
+import com.app.quantitymeasurement.entity.QuantityMeasurementEntity;
 import com.app.quantitymeasurement.model.QuantityModel;
 import com.app.quantitymeasurement.repository.QuantityMeasurementRepository;
 import com.app.quantitymeasurement.unit.IMeasurable;
 
-
+/**
+ * QuantityMeasurementServiceImpl
+ *
+ * Service layer implementation for all quantity measurement business operations.
+ * Registered as a Spring bean via {@code @Service}; the {@link QuantityMeasurementRepository}
+ * is injected by Spring through {@code @Autowired} field injection.
+ */
 @Service
 public class QuantityMeasurementServiceImpl implements IQuantityMeasurementService {
 
@@ -26,8 +32,9 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
     @Autowired
     private QuantityMeasurementRepository repository;
 
-    
+    // -------------------------------------------------------------------------
     // Internal enums
+    // -------------------------------------------------------------------------
 
     /** Operation names used when building entity records. */
     private enum Operation {
@@ -43,7 +50,14 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
     // Public API
     // -------------------------------------------------------------------------
 
-    
+    /**
+     * {@inheritDoc}
+     *
+     * Converts both quantities to their base units before comparing.
+     * The result is stored in the repository for audit purposes.
+     *
+     * @throws QuantityMeasurementException if the quantities belong to different categories
+     */
     @Override
     public QuantityMeasurementDTO compare(QuantityDTO thisQuantityDTO, QuantityDTO thatQuantityDTO) {
         QuantityModel<IMeasurable> q1 = convertDtoToModel(thisQuantityDTO);
@@ -315,6 +329,15 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
 
     /**
      * Validates that the two operands are compatible for an arithmetic operation.
+     *
+     * <p>Checks performed:</p>
+     * <ol>
+     *   <li>Neither operand is {@code null}.</li>
+     *   <li>Both operands belong to the same measurement category.</li>
+     *   <li>The category supports arithmetic (temperature is rejected).</li>
+     *   <li>When {@code targetRequired} is {@code true}, the target unit is not {@code null}.</li>
+     * </ol>
+     *
      * @param q1             first operand
      * @param q2             second operand
      * @param targetUnit     target unit; may be {@code null} when not required
@@ -420,6 +443,10 @@ public class QuantityMeasurementServiceImpl implements IQuantityMeasurementServi
      * Persists an error record to the repository when an operation fails.
      * Called from every catch block so that failed operations always appear in the
      * audit history, regardless of whether the calling method re-throws the exception.
+     *
+     * <p>Save failures are logged but not re-thrown; the original operation exception
+     * must propagate to the caller undisturbed.</p>
+     *
      * @param q1           first operand
      * @param q2           second operand
      * @param operation    operation that failed
