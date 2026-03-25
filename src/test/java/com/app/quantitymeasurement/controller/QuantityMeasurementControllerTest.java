@@ -1,9 +1,9 @@
 package com.app.quantitymeasurement.controller;
 
 import com.app.quantitymeasurement.config.SecurityConfig;
-import com.app.quantitymeasurement.model.QuantityDTO;
-import com.app.quantitymeasurement.model.QuantityInputDTO;
-import com.app.quantitymeasurement.model.QuantityMeasurementDTO;
+import com.app.quantitymeasurement.dto.QuantityDTO;
+import com.app.quantitymeasurement.dto.QuantityInputDTO;
+import com.app.quantitymeasurement.dto.QuantityMeasurementDTO;
 import com.app.quantitymeasurement.service.IQuantityMeasurementService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,13 +21,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * QuantityMeasurementControllerTest
- * Full 23-test suite ported from UC16 to UC17 @WebMvcTest style.
- * All UC16 scenarios preserved: layer separation, comparison, conversion,
- * addition (2+3 args), subtraction, division, all-ops pass, data flow,
- * backward compatibility, validation, GET endpoints, Mockito.verify.
- */
+
 @WebMvcTest(QuantityMeasurementController.class)
 @org.springframework.context.annotation.Import(SecurityConfig.class)
 public class QuantityMeasurementControllerTest {
