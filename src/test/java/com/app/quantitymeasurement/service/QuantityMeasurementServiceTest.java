@@ -1,9 +1,9 @@
 package com.app.quantitymeasurement.service;
 
 import com.app.quantitymeasurement.exception.QuantityMeasurementException;
-import com.app.quantitymeasurement.model.QuantityDTO;
-import com.app.quantitymeasurement.model.QuantityMeasurementDTO;
-import com.app.quantitymeasurement.model.QuantityMeasurementEntity;
+import com.app.quantitymeasurement.dto.QuantityDTO;
+import com.app.quantitymeasurement.dto.QuantityMeasurementDTO;
+import com.app.quantitymeasurement.entity.QuantityMeasurementEntity;
 import com.app.quantitymeasurement.repository.QuantityMeasurementRepository;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +28,7 @@ import static org.mockito.Mockito.*;
  *
  * @ExtendWith(MockitoExtension.class) initializes mocks without starting Spring context.
  * QuantityMeasurementRepository is mocked so tests are isolated from the database.
+
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)

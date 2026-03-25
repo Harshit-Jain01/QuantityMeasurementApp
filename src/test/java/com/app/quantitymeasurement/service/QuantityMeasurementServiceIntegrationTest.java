@@ -1,9 +1,9 @@
 package com.app.quantitymeasurement.service;
 
 import com.app.quantitymeasurement.exception.QuantityMeasurementException;
-import com.app.quantitymeasurement.model.QuantityDTO;
-import com.app.quantitymeasurement.model.QuantityMeasurementDTO;
-import com.app.quantitymeasurement.model.QuantityMeasurementEntity;
+import com.app.quantitymeasurement.dto.QuantityDTO;
+import com.app.quantitymeasurement.dto.QuantityMeasurementDTO;
+import com.app.quantitymeasurement.entity.QuantityMeasurementEntity;
 import com.app.quantitymeasurement.repository.QuantityMeasurementRepository;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -25,17 +25,7 @@ import static org.mockito.Mockito.*;
  * Ports all 55 UC16 service test scenarios to the UC17 Spring service.
  * Tests call the service directly (compare, convert, add, subtract, divide)
  * and assert on the returned QuantityMeasurementDTO instead of raw values.
- *
- * All UC16 spec items preserved:
- * - Comparison across all categories (length, weight, volume, temperature)
- * - Conversion across all categories
- * - Addition (2-arg and 3-arg with target unit)
- * - Subtraction (2-arg and 3-arg)
- * - Division
- * - Exception handling: temperature arithmetic, cross-category, divide-by-zero
- * - End-to-end integration flows (all ops in sequence)
- * - Repository tracking: every operation is saved
- * - Scalability: existing ops produce same results after full suite run
+ 
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
