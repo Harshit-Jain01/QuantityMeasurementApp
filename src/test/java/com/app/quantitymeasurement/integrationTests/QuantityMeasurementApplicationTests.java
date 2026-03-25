@@ -1,9 +1,9 @@
 package com.app.quantitymeasurement.integrationTests;
 
-import com.app.quantitymeasurement.model.QuantityDTO;
-import com.app.quantitymeasurement.model.QuantityInputDTO;
-import com.app.quantitymeasurement.model.QuantityMeasurementDTO;
-import com.app.quantitymeasurement.model.QuantityMeasurementEntity;
+import com.app.quantitymeasurement.dto.QuantityDTO;
+import com.app.quantitymeasurement.dto.QuantityInputDTO;
+import com.app.quantitymeasurement.dto.QuantityMeasurementDTO;
+import com.app.quantitymeasurement.entity.QuantityMeasurementEntity;
 import com.app.quantitymeasurement.repository.QuantityMeasurementRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,25 +24,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * QuantityMeasurementApplicationTests
- *
- * Full integration tests for the Quantity Measurement Spring Boot application.
- *
- * Uses @SpringBootTest to start the complete application context on a random port,
- * and TestRestTemplate to perform actual HTTP requests against the running server.
- * The H2 in-memory database is used for isolation — each test run starts clean.
- *
- * These tests verify the entire application stack:
- * - REST controller receives and validates requests
- * - Service layer performs business logic
- * - Repository persists results via Spring Data JPA
- * - Responses are serialized to JSON correctly
- * - Exception handling returns structured error responses
- * - Swagger UI is accessible
- * - H2 Console is accessible
- * - Actuator health endpoint returns UP
- */
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 public class QuantityMeasurementApplicationTests {
