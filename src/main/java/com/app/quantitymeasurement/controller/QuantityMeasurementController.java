@@ -1,7 +1,7 @@
 package com.app.quantitymeasurement.controller;
 
-import com.app.quantitymeasurement.model.QuantityInputDTO;
-import com.app.quantitymeasurement.model.QuantityMeasurementDTO;
+import com.app.quantitymeasurement.dto.QuantityInputDTO;
+import com.app.quantitymeasurement.dto.QuantityMeasurementDTO;
 import com.app.quantitymeasurement.service.IQuantityMeasurementService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,17 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.logging.Logger;
 
-/**
- * QuantityMeasurementController
- *
- * REST controller that exposes quantity measurement operations as HTTP endpoints.
- * All business logic is delegated to {@link IQuantityMeasurementService}; this
- * class is responsible only for request routing, input validation, and response
- * wrapping.
- * All POST endpoints accept a {@link QuantityInputDTO} request body. Bean Validation
- * (@Valid) is applied before the service is called; validation failures are handled
- * centrally by {@code GlobalExceptionHandler}.
- */
 @RestController
 @RequestMapping("/api/v1/quantities")
 @Tag(name = "Quantity Measurements", 
@@ -41,7 +30,9 @@ public class QuantityMeasurementController {
     @Autowired
     private IQuantityMeasurementService quantityMeasurementService;
 
+    // -------------------------------------------------------------------------
     // POST — operation endpoints
+    // -------------------------------------------------------------------------
 
     /**
      * Compares two quantities for equality after converting both to their base units.
