@@ -21,12 +21,12 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String extractEmail(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(SECRET.getBytes())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-    }
+    	public String extractEmail(String token) {
+    	    return Jwts.parserBuilder()
+    	            .setSigningKey(Keys.hmacShaKeyFor(SECRET.getBytes())) 
+    	            .build()
+    	            .parseClaimsJws(token)
+    	            .getBody()
+    	            .getSubject();
+    	}
 }
