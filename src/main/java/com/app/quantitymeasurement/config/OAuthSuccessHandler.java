@@ -24,25 +24,15 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
 
-        // ✅ Get user from Google
         OAuth2User user = (OAuth2User) authentication.getPrincipal();
 
-        // ✅ Extract email
+        //  GET EMAIL FROM GOOGLE
         String email = user.getAttribute("email");
 
-        // ✅ Generate JWT token
+        //  GENERATE TOKEN (ONLY THIS IS NEEDED)
         String token = jwtUtil.generateToken(email);
 
-        // ✅ Return JSON response (NOT redirect)
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        String jsonResponse = "{"
-                + "\"token\":\"" + token + "\","
-                + "\"email\":\"" + email + "\","
-                + "\"message\":\"Google login successful\""
-                + "}";
-
-        response.getWriter().write(jsonResponse);
+        //  REDIRECT TO FRONTEND WITH TOKEN
+        response.sendRedirect("http://localhost:5173/?token=" + token);
     }
 }

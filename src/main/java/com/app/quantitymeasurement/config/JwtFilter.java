@@ -1,5 +1,6 @@
 package com.app.quantitymeasurement.config;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,17 +26,17 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                    HttpServletResponse response,
                                    FilterChain chain)
-            throws ServletException, java.io.IOException {
+            throws ServletException, IOException {
 
         String path = request.getRequestURI();
         System.out.println("JWT FILTER HIT: " + path);
 
-        // ✅ SKIP PUBLIC ROUTES (VERY IMPORTANT FIX)
+        // Skip ONLY public routes (NOT /api)
         if (path.startsWith("/auth") ||
-            path.startsWith("/api") ||     // ✅ ADD THIS (CRITICAL FIX)
             path.startsWith("/oauth2") ||
-            path.startsWith("/login/oauth2") ||
-            path.startsWith("/favicon.ico")) {
+            path.startsWith("/login") ||
+            path.startsWith("/favicon.ico") ||
+            path.startsWith("/error")) {
 
             chain.doFilter(request, response);
             return;
@@ -44,18 +45,32 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             String header = request.getHeader("Authorization");
 
-            if (header != null && header.startsWith("Bearer ")) {
-                String token = header.substring(7);
-                String email = jwtUtil.extractEmail(token);
-
-                UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(email, null, List.of());
-
-                SecurityContextHolder.getContext().setAuthentication(auth);
+            //  If token missing → block request
+            if (header == null || !header.startsWith("Bearer ")) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\":\"Missing Token\"}");
+                return;
             }
+
+            String token = header.substring(7);
+
+            //  Validate & extract user
+            String email = jwtUtil.extractEmail(token);
+            System.out.println("JWT VALID USER: " + email);
+
+            UsernamePasswordAuthenticationToken auth =
+                    new UsernamePasswordAuthenticationToken(email, null, List.of());
+
+            SecurityContextHolder.getContext().setAuthentication(auth);
 
         } catch (Exception e) {
             System.out.println("JWT ERROR: " + e.getMessage());
+
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\":\"Invalid Token\"}");
+            return;
         }
 
         chain.doFilter(request, response);

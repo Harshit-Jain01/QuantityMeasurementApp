@@ -4,20 +4,30 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.*;
 
+import java.util.List;
+
 @Configuration
 public class CorsConfig {
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
 
-        CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("*"); // allow frontend
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+	    CorsConfiguration config = new CorsConfiguration();
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+	    // ADD ALL FRONTENDS (React + HTML)
+	    config.setAllowedOrigins(List.of(
+	        "http://localhost:5173",   // React
+	        "http://127.0.0.1:5500",  // HTML (Live Server)
+	        "http://localhost:5500"   // optional
+	    ));
 
-        return source;
-    }
+	    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+	    config.setAllowedHeaders(List.of("*"));
+	    config.setAllowCredentials(true);
+
+	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	    source.registerCorsConfiguration("/**", config);
+
+	    return source;
+	}
 }
