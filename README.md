@@ -345,6 +345,36 @@ Entity / Model Layer
     ```
     mvn test
     ```
+
+### 📂 Project Structure
+
+```
+  📦 QuantityMeasurementApp
+  │
+  ├── 📁 src
+  │   ├── 📁 main
+  │   │   └── 📁 java
+  │   │       └── 📁 com
+  │   │           └── 📁 app
+  │   │               └── 📁 quantitymeasurement
+  │   │                   └── 📄 LengthUnit.java
+  │   │                   └── 📄 IMeasurable.java
+  |   |                   └── 📄 WeightUnit.java
+  |   |                   └── 📄 Quantity.java
+  │   │                   └── 📄 VolumeUnit.java
+  |   |                   └── 📄 TemperatureUnit.java
+  │   │                   └── 📄 QuantityMeasurementApp.java
+  |   |
+  |   |
+  │   └── 📁 test
+  │       └── 📁 java
+  │           └── 📁 com
+  │               └── 📁 app
+  │                   └── 📁 quantitymeasurement
+  │                    └── 📄 QuantityMeasurementAppTest.java 
+  │                    
+  └── 📘 pom.xml
+  └── 📘 README.md
 ```
 
 ## ⚙️ Development Approach
