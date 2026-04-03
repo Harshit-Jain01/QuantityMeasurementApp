@@ -94,6 +94,238 @@
 - Disables arithmetic on absolute temperatures (throws `UnsupportedOperationException`)  
 - Ensures type safety and keeps temperature separate from other measurement categories
 
+## UC15 – N-Tier Architecture Refactoring
+
+UC15 refactors the **Quantity Measurement Application** from a monolithic structure into a **professional N-Tier architecture** to improve maintainability, scalability, and separation of concerns.
+
+### Architecture Layers
+
+The application is divided into the following layers:
+```
+Application Layer
+↓
+Controller Layer
+↓
+Service Layer
+↓
+Repository Layer
+↓
+Entity / Model Layer
+
+```
+
+### Layers Description
+
+**Application Layer**
+- Entry point of the application (`QuantityMeasurementApp`)
+- Initializes controller, service, and repository.
+
+**Controller Layer**
+- Handles user requests and delegates operations to the service layer.
+- Implemented by `QuantityMeasurementController`.
+
+**Service Layer**
+- Contains business logic for comparison, conversion, and arithmetic operations.
+- Implemented by `IQuantityMeasurementService` and `QuantityMeasurementServiceImpl`.
+
+**Repository Layer**
+- Handles persistence of measurement operations.
+- Implemented by `IQuantityMeasurementRepository` and `QuantityMeasurementCacheRepository`.
+
+**Entity / Model Layer**
+- Defines data structures used across the application.
+- Includes:
+  - `QuantityDTO`
+  - `QuantityModel`
+  - `QuantityMeasurementEntity`
+
+### Design Principles Used
+
+- **SOLID Principles**
+- **Dependency Injection**
+- **Interface Segregation**
+- **Separation of Concerns**
+
+### Design Patterns Used
+
+- **Singleton Pattern** – Repository
+- **Factory Pattern** – Object creation
+- **Facade Pattern** – Controller interface
+
+## UC16 – JDBC-Based Database Integration
+  - Enhances the N-Tier architecture with persistent storage using JDBC, replacing the in-memory repository with `QuantityMeasurementDatabaseRepository` for durable data across restarts.
+  - Introduces configuration and performance utilities like `ApplicationConfig` (for environment-based settings) and `ConnectionPool` (for efficient connection reuse).
+
+- ⚙️ **Improved Repository & Error Handling**
+  - Extends repository capabilities with filtering and management methods (`getMeasurementsByType`, `getTotalCount`, etc.) and uses `PreparedStatement` to prevent SQL injection.
+  - Adds structured exception handling via `DatabaseException` and shifts logging to `java.util.logging` (via SLF4J/Logback).
+
+- 🧪 **Configurability, Testing & Best Practices**
+  - Supports H2 by default with easy switching to MySQL/PostgreSQL via properties, and runtime repository selection (`database` or `cache`).
+  - Includes schema setup, integration/unit tests, and follows best practices like connection pooling, clean resource handling, and layered architecture organization.
+ 
+##  UC17 – Spring Boot REST Architecture with JPA Persistence (NEW)
+
+- Transforms the application into a **Spring Boot-based RESTful system** while retaining the core domain logic and design.
+- Introduces `QuantityMeasurementApplication` as the centralized **application entry point**.
+- Replaces manual JDBC implementation with **Spring Data JPA (`JpaRepository`)** for simplified and efficient data access.
+- Implements **derived query methods** along with **custom JPQL/native queries** in repository interfaces.
+- Reorganizes package structure to improve **clarity, modularity, and maintainability**.
+
+### 📦 Data Transfer Layer
+- Enhances `QuantityDTO` using validation annotations such as `@NotNull`, `@Min`, etc.
+- Introduces:
+  - `QuantityInputDTO` for handling API request payloads  
+  - `QuantityMeasurementDTO` for structured API responses  
+
+### 🔢 Operation Management
+- Adds `OperationType` enum to represent supported operations (ADD, SUBTRACT, CONVERT, COMPARE).
+- Ensures **type-safe and extensible operation handling**.
+
+### 🌐 REST API
+- Exposes RESTful endpoints for:
+  - Quantity operations (conversion, arithmetic, comparison)  
+  - Measurement history tracking  
+- Built using standard Spring annotations like `@RestController`, `@RequestMapping`, etc.
+
+### 📚 API Documentation
+- Integrates **Swagger / OpenAPI** for interactive API documentation and testing.
+
+### ⚠️ Exception Handling
+- Implements centralized error handling via `GlobalExceptionHandler` using:
+  - `@ControllerAdvice`  
+  - `@ExceptionHandler`  
+- Provides consistent and structured API error responses.
+
+### 🔐 Security Configuration
+- Introduces `SecurityConfig` with a **permissive setup** for development.
+- Designed to support future integration with authentication mechanisms (JWT/OAuth).
+
+###  Performance & Database
+- Uses **HikariCP** for efficient database connection pooling.
+- Enables **JPA auto-DDL** for automatic schema management.
+
+###  Monitoring & Observability
+- Integrates **Spring Boot Actuator** to provide:
+  - Health checks  
+  - Metrics  
+  - Application monitoring endpoints  
+
+###  Testing
+- Includes comprehensive test coverage:
+  - Controller tests  
+  - Service layer tests  
+  - Repository tests  
+  - Integration tests  
+
+### 🏗️ Outcome
+- Marks the transition from a traditional layered system to a **modern, scalable, and enterprise-ready Spring Boot architecture**.
+
+##  UC18 – Spring Security with JWT & OAuth2 Authentication (Google & GitHub)
+
+- Enhances the application with **robust security using Spring Security**, integrating JWT-based authentication along with Google and GitHub OAuth2 login.
+- Secures REST APIs with **role-based authorization** and follows industry-standard security practices.
+
+### 🔐 Security Architecture
+- Introduces a dedicated `security` package containing:
+  - `JwtTokenProvider`
+  - `JwtAuthenticationFilter`
+  - `JwtAuthenticationEntryPoint`
+  - `JwtAccessDeniedHandler`
+  - `CustomUserDetailsService`
+  - `UserPrincipal`
+  - `CustomOAuth2UserService`
+  - `OAuth2AuthenticationSuccessHandler`
+  - `OAuth2AuthenticationFailureHandler`
+
+### 🪪 JWT Authentication
+- Implements complete JWT lifecycle:
+  - Generates **signed tokens (HS256)** after authentication
+  - Extracts user details (email, roles) from token
+  - Validates token for every request
+- Configurable via:
+  - `app.jwt.secret`
+  - `app.jwt.expiration-ms`
+
+### 👤 Local Authentication APIs
+- Provides REST endpoints under `/api/v1/auth`:
+  - `POST /register` → registers user with **BCrypt-encrypted password** and returns JWT  
+  - `POST /login` → validates credentials and returns JWT  
+  - `GET /me` → returns authenticated user profile  
+
+### 🌐 OAuth2 Authentication
+
+#### Google Login
+- Uses Spring Security OAuth2 flow at:
+  - `/oauth2/authorization/google`
+- Fetches user profile and maps to local user.
+- Issues JWT on successful authentication and redirects to frontend.
+
+#### GitHub Login
+- Available at:
+  - `/oauth2/authorization/github`
+- Handles provider-specific attributes:
+  - `id` → providerId  
+  - `login` → username  
+  - `avatar_url` → profile image  
+- Validates email availability (rejects login if email is private).
+- Requires scopes: `read:user`, `user:email`.
+
+### 🗄️ User Management
+- Introduces `User` JPA entity (`app_user` table) with fields:
+  - email, name, password  
+  - provider (`LOCAL`, `GOOGLE`, `GITHUB`)  
+  - providerId, role (`USER`, `ADMIN`)  
+  - imageUrl, createdAt  
+
+- Adds `UserRepository` with:
+  - `findByEmail()`  
+  - `existsByEmail()`  
+
+### 📦 DTO Layer
+- Introduces:
+  - `AuthRequest`
+  - `AuthResponse` (Builder pattern)
+  - `RegisterRequest`
+- Uses validation annotations:
+  - `@NotBlank`, `@Email`, `@Size`
+
+### 🛡️ Authorization Rules
+- Enables method-level security using `@EnableMethodSecurity`.
+- Access control:
+  - Public → Auth, OAuth2, Swagger, Actuator  
+  - USER & ADMIN → All quantity operations  
+  - ADMIN only → Error history endpoint  
+
+### ⚙️ Security Configuration
+- Configures `SecurityConfig`:
+  - Registers `DaoAuthenticationProvider` with BCrypt
+  - Exposes `AuthenticationManager`
+  - Adds `JwtAuthenticationFilter` before Spring security filters  
+
+### 🚫 Stateless Security
+- Enforces **stateless session policy**:
+  - No HTTP sessions  
+  - CSRF disabled  
+  - No form login / HTTP Basic  
+
+### 🔧 Configuration Properties
+- Uses environment-based configuration:
+  - JWT settings (`secret`, `expiration`)
+  - OAuth2 client credentials
+  - Redirect URI for frontend  
+
+### 🧪 Testing
+- Adds comprehensive test coverage:
+  - JWT functionality  
+  - Authentication flows  
+  - Security filters  
+  - Controller endpoints  
+  - Repository interactions  
+
+### 🏗️ Outcome
+- Upgrades the system to a **secure, scalable, and production-ready backend** with modern authentication standards and extensible security design.
+
 ### 🧰 Tech Stack
 
 - **Java 17+** — core language and application development  
