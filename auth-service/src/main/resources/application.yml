@@ -1,0 +1,40 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: auth-service
+
+  main:
+    allow-bean-definition-overriding: true
+
+  datasource:
+    url: jdbc:h2:file:./data/authdb;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+  instance:
+    prefer-ip-address: true
+
+google:
+  # Supports one or more Google OAuth client IDs, separated by commas.
+  client-id: 464577427173-7950va68opt82k71u9vefv7o9oe0eaks.apps.googleusercontent.com
